@@ -53,6 +53,33 @@
       </div>
     </div>
     
+    <div class="ui main container">  
+      <div class="ui segment">
+        <form class="ui large form">
+          <h2>記録確認</h2>
+        </form>
+        
+        <div class="field">
+           <div class="ui input">
+             <input type="date" placeholder="">
+           </div>
+          </div>
+          
+        <div class="field">
+          <p>朝ご飯</p>
+          <p>昼ご飯</p>
+          <p>夜ご飯</p>
+        </div>
+          
+      </div>
+    </div>
+    
+    <div class="ui main container">  
+      <button class="ui grey fluid button" type="submit">
+            退会
+      </button>
+    </div>
+
 </template>
 
 <script>
