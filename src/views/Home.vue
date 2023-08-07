@@ -43,6 +43,12 @@ export default {
   computed: {
   // 計算した結果を変数として利用したいときはここに記述する
   },
+  
+  created: async function() {
+    // Vue.jsの読み込みが完了したときに実行する処理はここに記述する
+    // apiからarticleを取得する
+    this.$router.push({ name: 'Recipe'})
+  },
 
 
 
