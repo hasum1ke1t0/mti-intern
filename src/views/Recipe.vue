@@ -85,6 +85,7 @@ export default {
 
         // 記事がなかった場合undefinedとなり、記事追加時のunshiftでエラーとなるため、空のarrayを代入
         this.recipes = jsonData.recipes ?? [];
+        console.log(this.recipes);
       } catch (e) {
         
       }
