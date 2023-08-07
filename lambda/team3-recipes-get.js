@@ -40,6 +40,7 @@ exports.handler = async (event, context) => {
   
     if (articles.length == 0) {
       response.body = JSON.stringify({ articles: [] });
+      response.body = JSON.stringify({ recipes: [] });
       console.log(2)
     } else {
       const unmarshalledArticles = articles.map((item) => unmarshall(item));
@@ -53,7 +54,8 @@ exports.handler = async (event, context) => {
       let newUnmsArticles = [];
       console.log(5)
       if (!hasValidQs) {
-        response.body = JSON.stringify({ articles: unmarshalledArticles });
+        //response.body = JSON.stringify({ articles: unmarshalledArticles });
+        response.body = JSON.stringify({ recipes: unmarshalledArticles });
         console.log(6)
       } else{
         console.log(7)
@@ -63,7 +65,8 @@ exports.handler = async (event, context) => {
             newUnmsArticles.push(unmarshalledArticles[i]);
           }
         }
-        response.body = JSON.stringify({ articles: newUnmsArticles });
+        //response.body = JSON.stringify({ articles: newUnmsArticles });
+        response.body = JSON.stringify({ recipes: newUnmsArticles });
       }
     }
   } catch (e) {
