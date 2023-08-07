@@ -142,6 +142,11 @@ export default {
           // 成功時の処理
           console.log(jsonData);
           console.log("ログイン完了")
+          //ページ遷移
+          console.log("ページ遷移開始")
+          this.$router.push('/MyPage')
+          //ページ遷移終了
+          console.log("ページ遷移終了")
         } catch (e) {
           // エラー時の処理
           console.log("エラー")
