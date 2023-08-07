@@ -35,6 +35,7 @@ exports.handler = async (event, context) => {
   
   const scanCommand = new ScanCommand(param);
   try {
+
     const articles = (await client.send(scanCommand)).Items;
     console.log(1)
   
@@ -90,6 +91,7 @@ exports.handler = async (event, context) => {
       var rand = Math.floor( Math.random() * randMax );
       response.body = JSON.stringify({ articles: newUnmsAge[rand] });
     }
+
   } catch (e) {
     response.statusCode = 500;
     response.body = JSON.stringify({

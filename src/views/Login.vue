@@ -2,7 +2,8 @@
   <div>
     <div class="ui main container">
       <!-- 基本的なコンテンツはここに記載する -->
-      <div class="ui segment">
+      <img class="logoimg" src="src/components/sukusucook.png" >
+      <div class="ui segment"  v-if="!isLogined">
         <!--ここにセグメントの中身を記述する -->
         <form class="ui large form" @submit.prevent="submit">
           <div class ="field">
@@ -22,14 +23,14 @@
           <div class ="field" v-if="!isLogin">
             <div class="ui left icon input">
               <i class="tag icon"></i>
-              <input type="text" placeholder="Nickname" v-model="user.nickname">
+              <input type="text" placeholder="Username" v-model="user.userName">
             </div>
           </div>
           
           <div class ="field" v-if="!isLogin">
             <div class="ui left icon input">
               <i class="calendar icon"></i>
-              <input type="text" placeholder="Age" v-model.number="user.age">
+              <input type="text" placeholder="birthday" v-model.number="user.birthday">
             </div>
           </div>
           <button class="ui huge green fluid button" type="submit">
@@ -37,8 +38,11 @@
           </button>
         </form>
       </div>
-      <button @click="toggleMode()" class="ui hoge grey fluid button" type="submit">
+      <button @click="toggleMode()" class="ui hoge grey fluid button" type="submit" v-if="!isLogined">
         {{toggleText}}
+      </button>
+      <button @click="logout()" class="ui hoge grey fluid button" type="submit" v-if="isLogined">
+        ログアウト
       </button>
         
       
@@ -63,11 +67,12 @@ export default {
     // Vue.jsで使う変数はここに記述する
     return {
       isLogin: true,
+      isLogined:true,
       user:{
         userId:null,
         password:null,
-        nickname:null,
-        age:null,
+        userName:null,
+        birthday:null,
       },
     };
   },
@@ -88,6 +93,18 @@ export default {
     toggleMode(){
       console.log("toggleMode")
       this.isLogin = !this.isLogin
+    },
+    loginOrOut(){
+      this.isLogined = !this.isLogined
+    },
+    logout(){
+      this.isLogined = !this.isLogined
+      window.localStorage.removeItem('token');
+      
+      console.log("トークン",window.localStorage.getItem('token'));
+      window.localStorage.removeItem('userId')
+      console.log("userId",window.localStorage.getItem('userId'));
+      console.log("ログアウト完了")
     },
     // 非同期操作が入るのでasyncを付与する
     async submit(){
@@ -120,11 +137,14 @@ export default {
           
           console.log(window.localStorage.getItem('token'));
           window.localStorage.setItem('userId',this.user.userId)
+          this.isLogined=true
           
           // 成功時の処理
           console.log(jsonData);
+          console.log("ログイン完了")
         } catch (e) {
           // エラー時の処理
+          console.log("エラー")
           console.log(e)
         }
         return
@@ -137,9 +157,10 @@ export default {
       const requestBody = {
         userId:this.user.userId,
         password:this.user.password,
-        nickname:this.user.nickname,
-        age:this.user.age,
+        userName:this.user.userName,
+        birthday:this.user.birthday,
       };
+      console.log(requestBody)
 
       try {
         /* global fetch */
@@ -159,9 +180,10 @@ export default {
         }
         
         // 成功時の処理
-        console.log(jsonData);
+        console.log("サインアップ完了",jsonData);
       } catch (e) {
         // エラー時の処理
+        console.log(e)
       }
       },
     
@@ -171,4 +193,8 @@ export default {
 
 <style scoped>
 /* このコンポーネントだけに適用するCSSはここに記述する */
+.logoimg{
+        width:30%;
+        margin:1rem;
+    }
 </style>
