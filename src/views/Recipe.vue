@@ -12,62 +12,28 @@
     </div>
       
       
-    <div class="ui main container">  
-      <div class="ui column">
-  
-          <div class="column card">
-            <div class="ui segment">
-              <h2>メニュー名</h2>
-              <h4>材料</h4>
-              <ul>
-                <li>ピーマン</li>
-                <li>油揚げ</li>
-              </ul>
-              <h4>手順</h4>
-              <ol>
-                <li>ピーマン、油揚げを切る</li>
-                <li>焼く</li>
-              </ol>
-            </div>
-          </div>
-          
-          <div class="column card">
-            <div class="ui segment">
-              <h2>メニュー名</h2>
-              <h4>材料</h4>
-              <ul>
-                <li>にんじん</li>
-                <li>たまご</li>
-              </ul>
-              <h4>手順</h4>
-              <ol>
-                <li>にんじんを切る</li>
-                <li>焼く</li>
-              </ol>
-            </div>
-          </div>
-          
-          <div class="column card">
-            <div class="ui segment">
-              <h2>メニュー名</h2>
-              <h4>材料</h4>
-              <ul>
-                <li>にんじん</li>
-                <li>たまご</li>
-              </ul>
-              <h4>手順</h4>
-              <ol>
-                <li>にんじんを切る</li>
-                <li>焼く</li>
-              </ol>
-            </div>
-          </div>
-
+    <div class="ui segment">
+        <ul class="ui comments divided recupe-list">
+          <template v-for="(recipe, index) in recipes" :key="index">
+            <li class="comment">
+              <div class="content">
+                <span class="recipe_title">{{ recipe.recipeTitle }}</span>
+                <p class="age">年齢: {{recipe.age}}歳向け</p>
+                <p class="kcal">総カロリー: {{recipe.kcal}}</p>
+                <p class="text">
+                  {{ recipe.recipeContent }}
+                </p>
+                <div class="ui divider"></div>
+              </div>
+            </li>
+          </template>
+        </ul>
       </div>
-    </div>
 </template>
 
 <script>
+import { baseUrl } from "@/assets/config.js";
+const headers = { Authorization: "mtiToken" };
 // 必要なものはここでインポートする
 // @は/srcの同じ意味です
 // import something from '@/components/something.vue';
@@ -82,8 +48,26 @@ export default {
   data() {
     // Vue.jsで使う変数はここに記述する
     return {
+      recipes: [],
     };
   },
+  
+  created: async function () {
+    // Vue.jsの読み込みが完了したときに実行する処理はここに記述する
+    // apiからarticleを取得する
+
+    if (
+      window.localStorage.getItem("userId") &&
+      window.localStorage.getItem("token")
+    ) {
+      this.iam = window.localStorage.getItem("userId");
+      await this.getArticles();
+    } else {
+      window.localStorage.clear();
+      this.$router.push({ name: "Login" });
+    }
+  },
+  
 
   computed: {
     // 計算した結果を変数として利用したいときはここに記述する
@@ -91,6 +75,34 @@ export default {
 
   methods: {
     // Vue.jsで使う関数はここで記述する
+    async getArticles() {
+      this.isCallingApi = true;
+
+      try {
+        /* global fetch */
+        const res = await fetch(baseUrl + "/recipes", {
+          method: "GET",
+          headers,
+        });
+
+        const text = await res.text();
+        const jsonData = text ? JSON.parse(text) : {};
+
+        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+        if (!res.ok) {
+          const errorMessage =
+            jsonData.message ?? "エラーメッセージがありません";
+          throw new Error(errorMessage);
+        }
+
+        // 記事がなかった場合undefinedとなり、記事追加時のunshiftでエラーとなるため、空のarrayを代入
+        this.recipes = jsonData.recipes ?? [];
+      } catch (e) {
+        this.errorMsg = `記事一覧取得時にエラーが発生しました: ${e}`;
+      } finally {
+        this.isCallingApi = false;
+      }
+    },
   },
 }
 </script>
