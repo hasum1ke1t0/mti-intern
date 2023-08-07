@@ -1,7 +1,7 @@
 const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const client = new DynamoDBClient({ region: "ap-northeast-1" });
-const TableName = "User";
+const TableName = "Recipe";
 
 exports.handler = async (event, context) => {
   //レスポンスの雛形
@@ -30,7 +30,7 @@ exports.handler = async (event, context) => {
     const user = (await client.send(command)).Item;
 
     //TODO: 条件に該当するデータがあればパスワードを隠蔽をする処理を記述
-    delete user?.passeord;
+    delete user?.password;
 
     //TODO: レスポンスボディに取得したUserの情報を設定する
     response.body=JSON.stringify(unmarshall(user));

@@ -13,13 +13,13 @@
       
       
     <div class="ui segment">
-        <ul class="ui comments divided recupe-list">
+        <ul class="ui comments divided recipe-list">
           <template v-for="(recipe, index) in recipes" :key="index">
             <li class="comment">
               <div class="content">
                 <span class="recipe_title">{{ recipe.recipeTitle }}</span>
-                <p class="age">年齢: {{recipe.age}}歳向け</p>
-                <p class="kcal">総カロリー: {{recipe.kcal}}</p>
+                <p class="age">年齢: {{ recipe.age }}歳向け</p>
+                <p class="kcal">総カロリー: {{ recipe.kcal }}</p>
                 <p class="text">
                   {{ recipe.recipeContent }}
                 </p>
@@ -55,17 +55,7 @@ export default {
   created: async function () {
     // Vue.jsの読み込みが完了したときに実行する処理はここに記述する
     // apiからarticleを取得する
-
-    if (
-      window.localStorage.getItem("userId") &&
-      window.localStorage.getItem("token")
-    ) {
-      this.iam = window.localStorage.getItem("userId");
-      await this.getArticles();
-    } else {
-      window.localStorage.clear();
-      this.$router.push({ name: "Login" });
-    }
+    await this.getRecipes();
   },
   
 
@@ -75,8 +65,7 @@ export default {
 
   methods: {
     // Vue.jsで使う関数はここで記述する
-    async getArticles() {
-      this.isCallingApi = true;
+    async getRecipes() {
 
       try {
         /* global fetch */
@@ -87,7 +76,6 @@ export default {
 
         const text = await res.text();
         const jsonData = text ? JSON.parse(text) : {};
-
         // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
         if (!res.ok) {
           const errorMessage =
@@ -97,10 +85,9 @@ export default {
 
         // 記事がなかった場合undefinedとなり、記事追加時のunshiftでエラーとなるため、空のarrayを代入
         this.recipes = jsonData.recipes ?? [];
+        console.log(this.recipes);
       } catch (e) {
-        this.errorMsg = `記事一覧取得時にエラーが発生しました: ${e}`;
-      } finally {
-        this.isCallingApi = false;
+        
       }
     },
   },
