@@ -111,6 +111,7 @@ exports.handler = async (event, context) => {
       const randMax = newUnmsAge.length;
       var rand = Math.floor( Math.random() * randMax );
       response.body = JSON.stringify({ articles: newUnmsAge[rand] });
+      console.log(response.body)
     }
 
   } catch (e) {
