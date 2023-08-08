@@ -135,14 +135,14 @@ export default {
           }
           
           window.localStorage.setItem('token',jsonData.token);
+          window.localStorage.setItem('userName',jsonData.userName);
+          window.localStorage.setItem('birthday',jsonData.birthday);
           
-          console.log(window.localStorage.getItem('token'));
           window.localStorage.setItem('userId',this.user.userId)
           console.log(window.localStorage)
           this.isLogined=true
           
           // 成功時の処理
-          console.log(jsonData);
           console.log("ログイン完了")
           //ページ遷移
           console.log("ページ遷移開始")
