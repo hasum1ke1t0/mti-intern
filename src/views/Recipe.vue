@@ -3,7 +3,7 @@
         <form class="ui form" @submit.prevent="getSearchedRecipes">
           <div class="field">
             <label for="title">メニューキーワード</label>
-            <label for="title2">選択した食べ物が含まれるメニューを除外して検索されます。</label>
+            <label for="title2">選択した食べ物が含まれるメニューが検索されます。</label>
             <input v-model="search.material[0]" type="checkbox" id = "q0" value = "green_pepper">ピーマン
             <input v-model="search.material[1]" type="checkbox" id = "q1" value = "tomato">トマト
             <input v-model="search.material[2]" type="checkbox" id = "q2" value = "eggplant">なす
@@ -37,7 +37,7 @@
               <div class="content">
                 <span class="recipe_title">{{ recipe.recipeTitle }}</span>
                 <p class="age">年齢: {{ recipe.age }}歳向け</p>
-                <p class="kcal">総カロリー: {{ recipe.kcal }}</p>
+                <p class="kcal">総カロリー: {{ recipe.kcal }}kcal</p>
                 <p class="text">
                   {{ recipe.recipeContent }}
                 </p>
