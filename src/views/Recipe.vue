@@ -1,19 +1,20 @@
 <template>
+  <div class="ui main container">
     <div class="ui segment">
         <form class="ui form" @submit.prevent="getSearchedRecipes">
-          <div class="field">
-            <label for="title">メニューキーワード</label>
-            <label for="title2">選択した食べ物が含まれるメニューが検索されます。</label>
-            <input v-model="search.material[0]" type="checkbox" id = "q0" value = "green_pepper">ピーマン
-            <input v-model="search.material[1]" type="checkbox" id = "q1" value = "tomato">トマト
-            <input v-model="search.material[2]" type="checkbox" id = "q2" value = "eggplant">なす
-            <input v-model="search.material[3]" type="checkbox" id = "q3" value = "celery">セロリ
-            <input v-model="search.material[4]" type="checkbox" id = "q4" value = "mushroom">しいたけ
-            <input v-model="search.material[5]" type="checkbox" id = "q5" value = "goya">ゴーヤ
-            <input v-model="search.material[6]" type="checkbox" id = "q6" value = "carrot">にんじん
-            <input v-model="search.material[7]" type="checkbox" id = "q7" value = "cabbege">キャベツ
-            <input v-model="search.material[8]" type="checkbox" id = "q8" value = "asparagus">アスパラガス
-            <input v-model="search.material[9]" type="checkbox" id = "q9" value = "pumpkin">かぼちゃ
+          <div class="">
+            <h4 for="title">メニューキーワード</h4>
+            <label for="title2">選択した食べ物が含まれるメニューが検索されます。</label><br><br>
+            <label><input v-model="search.material[0]" type="checkbox" id = "q0" value = "green_pepper">ピーマン</label>
+            <label><input v-model="search.material[1]" type="checkbox" id = "q1" value = "tomato">トマト</label>
+            <label><input v-model="search.material[2]" type="checkbox" id = "q2" value = "eggplant">なす</label>
+            <label><input v-model="search.material[3]" type="checkbox" id = "q3" value = "celery">セロリ</label>
+            <label><input v-model="search.material[4]" type="checkbox" id = "q4" value = "mushroom">しいたけ</label>
+            <label><input v-model="search.material[5]" type="checkbox" id = "q5" value = "goya">ゴーヤ</label>
+            <label><input v-model="search.material[6]" type="checkbox" id = "q6" value = "carrot">にんじん</label>
+            <label><input v-model="search.material[7]" type="checkbox" id = "q7" value = "cabbege">キャベツ</label>
+            <label><input v-model="search.material[8]" type="checkbox" id = "q8" value = "asparagus">アスパラガス</label>
+            <label><input v-model="search.material[9]" type="checkbox" id = "q9" value = "pumpkin">かぼちゃ</label>
           </div>
           
           
@@ -47,6 +48,7 @@
           </template>
         </ul>
       </div>
+    </div>
 </template>
 
 <script>
