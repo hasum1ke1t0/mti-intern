@@ -1,15 +1,33 @@
 <template>
-    <div class="ui main container">
-      <!-- 基本的なコンテンツはここに記載する -->
-      <div class="ui segment">
-        <form class="ui form">
+    <div class="ui segment">
+        <form class="ui form" @submit.prevent="getSearchedRecipes">
           <div class="field">
-            <label for="keyword">キーワード検索</label>
-            <input v-model="keyword" type="text" name="keyword" placeholder="">
+            <label for="title">メニューキーワード</label>
+            <label for="title2">選択した食べ物が含まれるメニューを除外して検索されます。</label>
+            <input v-model="search.material[0]" type="checkbox" id = "q0" value = "green_pepper">ピーマン
+            <input v-model="search.material[1]" type="checkbox" id = "q1" value = "tomato">トマト
+            <input v-model="search.material[2]" type="checkbox" id = "q2" value = "eggplant">なす
+            <input v-model="search.material[3]" type="checkbox" id = "q3" value = "celery">セロリ
+            <input v-model="search.material[4]" type="checkbox" id = "q4" value = "mushroom">しいたけ
+            <input v-model="search.material[5]" type="checkbox" id = "q5" value = "goya">ゴーヤ
+            <input v-model="search.material[6]" type="checkbox" id = "q6" value = "carrot">にんじん
+            <input v-model="search.material[7]" type="checkbox" id = "q7" value = "cabbege">キャベツ
+            <input v-model="search.material[8]" type="checkbox" id = "q8" value = "asparagus">アスパラガス
+            <input v-model="search.material[9]" type="checkbox" id = "q9" value = "pumpkin">かぼちゃ
+          </div>
+          
+          
+          <div class="right-align">
+            <button
+              class="ui green button"
+              type="submit"
+              v-bind:disabled="isSearchButtonDisabled"
+            >
+              検索
+            </button>
           </div>
         </form>
       </div>
-    </div>
       
       
     <div class="ui segment">
@@ -49,6 +67,9 @@ export default {
     // Vue.jsで使う変数はここに記述する
     return {
       recipes: [],
+      search: {
+        material: [null,null,null,null,null,null,null,null,null,null]
+      },
     };
   },
   
@@ -61,6 +82,9 @@ export default {
 
   computed: {
     // 計算した結果を変数として利用したいときはここに記述する
+    isSearchButtonDisabled() {
+      return !this.search.material;
+    },
   },
 
   methods: {
@@ -89,6 +113,57 @@ export default {
       } catch (e) {
         
       }
+    },
+    async getSearchedRecipes() {
+      
+
+      const {material} = this.search;
+      
+      let tmp = ``;
+      console.log(tmp)
+      for(let i = 0;i < 10;i++){
+        if(this.search.material[i] == true){
+          if(tmp == ``){
+            console.log(i)
+            tmp += `material[`+i+`]=false`;
+          }else{
+            console.log(i)
+            tmp += `&material[`+i+`]=false`;
+          }
+        }else{
+          if(tmp == ``){
+            console.log(i)
+            tmp += `material[`+i+`]=true`;
+          }else{
+            console.log(i)
+            tmp += `&material[`+i+`]=true`;
+          }
+        }
+      }
+      const qs = tmp;
+      console.log(qs)
+      try {
+        /* global fetch */
+        const res = await fetch(baseUrl + `/recipes?${qs}`, {
+          method: "GET",
+          headers,
+        });
+
+        const text = await res.text();
+        console.log(text)
+        const jsonData = text ? JSON.parse(text) : {};
+
+        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+        if (!res.ok) {
+          const errorMessage =
+            jsonData.message ?? "エラーメッセージがありません";
+          throw new Error(errorMessage);
+        }
+
+        this.recipes = jsonData.recipes;
+      } catch (e) {
+      }
+      
     },
   },
 }
