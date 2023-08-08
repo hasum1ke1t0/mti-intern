@@ -139,7 +139,7 @@ export default {
           window.localStorage.setItem('birthday',jsonData.birthday);
           
           window.localStorage.setItem('userId',this.user.userId)
-          console.log(window.localStorage)
+          console.log("ローカルストレージ",window.localStorage)
           this.isLogined=true
           
           // 成功時の処理
