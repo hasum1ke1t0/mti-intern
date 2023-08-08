@@ -99,10 +99,9 @@ export default {
     },
     logout(){
       this.isLogined = !this.isLogined
-      window.localStorage.removeItem('token');
       
       console.log("トークン",window.localStorage.getItem('token'));
-      window.localStorage.removeItem('userId')
+      window.localStorage.clear()
       console.log("userId",window.localStorage.getItem('userId'));
       console.log("ログアウト完了")
     },
@@ -137,6 +136,7 @@ export default {
           
           console.log(window.localStorage.getItem('token'));
           window.localStorage.setItem('userId',this.user.userId)
+          console.log(window.localStorage)
           this.isLogined=true
           
           // 成功時の処理
@@ -193,6 +193,18 @@ export default {
       },
     
   },
+  created : async function(){
+      console.log("クリエイテッド")
+      console.log("トークン",window.localStorage)
+      if (window.localStorage.getItem('token') == null){
+        console.log("トークンがないのでログアウト状態です")
+        this.isLogined = false
+      }
+      else{
+        console.log("トークンがあるのでログイン状態です")
+        this.isLogined =true
+      }
+    }
 }
 </script>
 
