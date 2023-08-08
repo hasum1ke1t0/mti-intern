@@ -18,14 +18,6 @@
     export default{
         name:'Menu',
         
-          data() {
-            // Vue.jsで使う変数はここに記述する
-            return {
-              orLogin: true,
-              }
-            
-          },
-        
         computed:{
             loginText(){
                 return this.orLogin ? 'LOGOUT' : 'LOGIN'
