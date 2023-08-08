@@ -14,7 +14,7 @@
                 <h4>{{ recipe.recipeTitle }}</h4>
                 <p>年齢: {{ recipe.age }}歳向け</p>
                 <p>総カロリー: {{ recipe.kcal }}kcal</p>
-                <p>
+                <p style=white-space:pre-wrap>
                   {{ recipe.recipeContent }}
                 </p>
                 <div class="ui divider"></div>
@@ -26,7 +26,7 @@
     <!-- 見える部分だけ実装 -->
     <div class="ui main container">  
       <div class="ui segment">
-        <form class="ui large form">
+        <form class="ui large form" @submit.prevent="postDish">
           <h2>食事登録</h2>
           
           
@@ -57,7 +57,7 @@
     
     <div class="ui main container">  
       <div class="ui segment">
-        <form class="ui large form" @submit.prevent="postDish">
+        <form class="ui large form">
           <h2>記録確認</h2>
         </form>
         
@@ -103,11 +103,12 @@ export default {
     return {
       dish: {
         userId: window.localStorage.getItem('userId'),
+        timestamp: null,
         date: null,
         dishkind: null,
         kcal: null
       },
-      dishes:[]
+      dishes:[],
       recipe: [],
       userName:null,
     };
@@ -130,10 +131,11 @@ export default {
     async postDish() {
 
       const requestBody = {
-        userId: this.userId,
-        date: this.date,
-        dishkind: this.dishkind,
-        kcal: this.kcal
+        userId: this.dish.userId,
+        date: this.dish.date,
+        dishkind: this.dish.dishkind,
+        kcal: this.dish.kcal,
+        timestamp: this.dish.timestamp,
       };
       try {
         /* global fetch */
@@ -142,10 +144,8 @@ export default {
           body: JSON.stringify(requestBody),
           headers,
         });
-        console.log(res)
         const text = await res.text();
         const jsonData = text ? JSON.parse(text) : {};
-        console.log(jsonData)
         
         if (!res.ok) {
           const errorMessage =
