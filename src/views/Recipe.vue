@@ -2,19 +2,20 @@
   <div class="ui main container">
     <div class="ui segment">
         <form class="ui form" @submit.prevent="getSearchedRecipes">
-          <div class="">
-            <h4 for="title">メニューキーワード</h4>
-            <label for="title2">選択した食べ物が含まれるメニューが検索されます。</label><br><br>
-            <label><input v-model="search.material[0]" type="checkbox" id = "q0" value = "green_pepper">ピーマン</label>
-            <label><input v-model="search.material[1]" type="checkbox" id = "q1" value = "tomato">トマト</label>
-            <label><input v-model="search.material[2]" type="checkbox" id = "q2" value = "eggplant">なす</label>
-            <label><input v-model="search.material[3]" type="checkbox" id = "q3" value = "celery">セロリ</label>
-            <label><input v-model="search.material[4]" type="checkbox" id = "q4" value = "mushroom">しいたけ</label>
-            <label><input v-model="search.material[5]" type="checkbox" id = "q5" value = "goya">ゴーヤ</label>
-            <label><input v-model="search.material[6]" type="checkbox" id = "q6" value = "carrot">にんじん</label>
-            <label><input v-model="search.material[7]" type="checkbox" id = "q7" value = "cabbege">キャベツ</label>
-            <label><input v-model="search.material[8]" type="checkbox" id = "q8" value = "asparagus">アスパラガス</label>
-            <label><input v-model="search.material[9]" type="checkbox" id = "q9" value = "pumpkin">かぼちゃ</label>
+
+          <div class="field">
+            <label for="title">メニューキーワード</label>
+            <label for="title2">選択した食べ物をすべて含んだメニューが検索されます。</label>
+            <input v-model="search.material[0]" type="checkbox" id = "q0" value = "green_pepper">ピーマン
+            <input v-model="search.material[1]" type="checkbox" id = "q1" value = "tomato">トマト
+            <input v-model="search.material[2]" type="checkbox" id = "q2" value = "eggplant">なす
+            <input v-model="search.material[3]" type="checkbox" id = "q3" value = "onion">玉ねぎ
+            <input v-model="search.material[4]" type="checkbox" id = "q4" value = "mushroom">しいたけ
+            <input v-model="search.material[5]" type="checkbox" id = "q5" value = "goya">ゴーヤ
+            <input v-model="search.material[6]" type="checkbox" id = "q6" value = "carrot">にんじん
+            <input v-model="search.material[7]" type="checkbox" id = "q7" value = "cabbege">キャベツ
+            <input v-model="search.material[8]" type="checkbox" id = "q8" value = "asparagus">アスパラガス
+            <input v-model="search.material[9]" type="checkbox" id = "q9" value = "pumpkin">かぼちゃ
           </div>
           
           
@@ -39,7 +40,7 @@
                 <span class="recipe_title">{{ recipe.recipeTitle }}</span>
                 <p class="age">年齢: {{ recipe.age }}歳向け</p>
                 <p class="kcal">総カロリー: {{ recipe.kcal }}kcal</p>
-                <p class="text">
+                <p class="text" style=white-space:pre-wrap>
                   {{ recipe.recipeContent }}
                 </p>
                 <div class="ui divider"></div>
@@ -108,12 +109,13 @@ export default {
             jsonData.message ?? "エラーメッセージがありません";
           throw new Error(errorMessage);
         }
-
+        
         // 記事がなかった場合undefinedとなり、記事追加時のunshiftでエラーとなるため、空のarrayを代入
         this.recipes = jsonData.recipes ?? [];
+        
         console.log(this.recipes);
       } catch (e) {
-        
+        console.log(e)
       }
     },
     async getSearchedRecipes() {
