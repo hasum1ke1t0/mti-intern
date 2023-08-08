@@ -115,29 +115,16 @@ export default {
       }
     },
     async getSearchedRecipes() {
-      
-
       const {material} = this.search;
       
       let tmp = ``;
       console.log(tmp)
+      tmp += `material=`;
       for(let i = 0;i < 10;i++){
         if(this.search.material[i] == true){
-          if(tmp == ``){
-            console.log(i)
-            tmp += `material[`+i+`]=false`;
-          }else{
-            console.log(i)
-            tmp += `&material[`+i+`]=false`;
-          }
+          tmp += `true,`
         }else{
-          if(tmp == ``){
-            console.log(i)
-            tmp += `material[`+i+`]=true`;
-          }else{
-            console.log(i)
-            tmp += `&material[`+i+`]=true`;
-          }
+          tmp += `false,`
         }
       }
       const qs = tmp;
@@ -150,8 +137,8 @@ export default {
         });
 
         const text = await res.text();
-        console.log(text)
         const jsonData = text ? JSON.parse(text) : {};
+        console.log(res)
 
         // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
         if (!res.ok) {
@@ -162,6 +149,7 @@ export default {
 
         this.recipes = jsonData.recipes;
       } catch (e) {
+        
       }
       
     },
