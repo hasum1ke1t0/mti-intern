@@ -2,7 +2,9 @@
   <div>
     <div class="ui main container">
       <!-- 基本的なコンテンツはここに記載する -->
-      <img class="logoimg" src="src/components/sukusucook.png" >
+      <div style="text-align: center;">
+        <img class="logoimg" src="src/components/sukusucook.png" >
+      </div>
       <div class="ui segment"  v-if="!isLogined">
         <!--ここにセグメントの中身を記述する -->
         <form class="ui large form" @submit.prevent="submit">
@@ -199,7 +201,7 @@ export default {
 <style scoped>
 /* このコンポーネントだけに適用するCSSはここに記述する */
 .logoimg{
-        width:30%;
+        width:350px;
         margin:1rem;
     }
 </style>
