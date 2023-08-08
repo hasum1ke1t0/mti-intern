@@ -101,6 +101,7 @@ export default {
   data() {
     // Vue.jsで使う変数はここに記述する
     return {
+
       dish: {
         userId: window.localStorage.getItem('userId'),
         timestamp: null,
