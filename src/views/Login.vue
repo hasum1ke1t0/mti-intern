@@ -43,6 +43,9 @@
       <button @click="toggleMode()" class="ui hoge grey fluid button" type="submit" v-if="!isLogined">
         {{toggleText}}
       </button>
+        <div class="ui segment" v-if="isLogined">
+          <p>ログイン中：{{userName}}さん</p>
+        </div>
       <button @click="logout()" class="ui hoge grey fluid button" type="submit" v-if="isLogined">
         ログアウト
       </button>
@@ -88,6 +91,9 @@ export default {
     toggleText(){
       return this.isLogin ? '新規登録' : 'ログイン';
     },
+    userName(){
+      return this.user.userName
+    }
   },
 
   methods: {
@@ -210,6 +216,7 @@ export default {
       else{
         console.log("トークンがあるのでログイン状態です")
         this.isLogined =true
+        this.user.userName=window.localStorage.getItem('userName');
       }
     }
 }
