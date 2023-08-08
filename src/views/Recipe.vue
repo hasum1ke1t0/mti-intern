@@ -1,6 +1,8 @@
 <template>
+  <div class="ui main container">
     <div class="ui segment">
         <form class="ui form" @submit.prevent="getSearchedRecipes">
+
           <div class="field">
             <label for="title">メニューキーワード</label>
             <label for="title2">選択した食べ物をすべて含んだメニューが検索されます。</label>
@@ -47,6 +49,7 @@
           </template>
         </ul>
       </div>
+    </div>
 </template>
 
 <script>

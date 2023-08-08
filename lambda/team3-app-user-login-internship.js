@@ -42,9 +42,10 @@ exports.handler = async (event, context) => {
       throw new Error("uesrIdまたはpasswordが一致しません")
     }
     console.log("res.Countは",res.Count)
+    console.log("res.Items[0]は",res.Items[0])
 
     //TODO: 認証が成功した場合のレスポンスボディを設定する。
-    response.body = JSON.stringify({token:"mtiToken"})
+    response.body = JSON.stringify({token:"mtiToken",userName:res.Items[0].userName.S,birthday:res.Items[0].birthday.N})
   } catch (e) {
     if(e.message == "uesrIdまたはpasswordが一致しません"){
       response.statusCode=401;
