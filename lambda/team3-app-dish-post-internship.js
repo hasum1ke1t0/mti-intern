@@ -1,7 +1,7 @@
 const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const { marshall } = require("@aws-sdk/util-dynamodb");
 const client = new DynamoDBClient({ region: "ap-northeast-1" });
-const TableName = "team3-dish";
+const TableName = "team3-Dish";
 
 exports.handler = async (event, context) => {
   const response = {
@@ -13,13 +13,14 @@ exports.handler = async (event, context) => {
   };
 
   // TODO: リクエストボディの中身をJavaScriptオブジェクトに変換し、1つ、あるいは複数の変数に代入する
-  const {dishId, userId, date, dishkind, kcal} = JSON.parse(event.body)
+  const {userId, date, dishkind, kcal} = JSON.parse(event.body)
   // TODO: DBに登録するための情報をparamオブジェクトとして宣言する（中身を記述）
+  const timestamp = Date.now();
   const param = {
     TableName,
     Item:marshall({
-      dishId,
       userId,
+      timestamp,
       date,
       dishkind,
       kcal
@@ -35,7 +36,7 @@ exports.handler = async (event, context) => {
     // TODO: 登録に成功した場合の処理を記載する。(status codeの設定と、response bodyの設定)
     response.statuCode=201;
     response.body = JSON.stringify({
-      dishId,userId,date,dishkind,kcal})
+      userId,timestamp,date,dishkind,kcal})
   } catch (e) {
     response.statusCode = 500;
     response.body = JSON.stringify({
