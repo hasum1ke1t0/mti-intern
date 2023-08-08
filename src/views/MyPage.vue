@@ -1,57 +1,50 @@
 <template>
   <div class="ui main container"> 
     <div class="ui segment">
-      <p>ようこそ、{{ }}さん</p>
+      <p>ようこそ、{{userName}}さん</p>
     </div>
   </div>
+
   
     <div class="ui main container">  
-      <div class="ui segment">
-        <h1>今日のおすすめメニュー</h1>
-        
-        <h2>メニュー名</h2>
-        <h4>材料</h4>
-        <ul>
-          <li>ピーマン</li>
-          <li>油揚げ</li>
-        </ul>
-        <h4>手順</h4>
-        <ol>
-          <li>ピーマン、油揚げを切る</li>
-          <li>焼く</li>
-        </ol>
-        <!---->
-        <!--
-        <li class="comment">
-          <div class="content">
-            <span class="recipe_title">{{ recipe.recipeTitle }}</span>
-          </div>
-        </li><!---->
-      </div>
+            <div class="ui segment">
+              <h1>今日のおすすめメニュー</h1>
+              
+              <div class="content">
+                <h4>{{ recipe.recipeTitle }}</h4>
+                <p>年齢: {{ recipe.age }}歳向け</p>
+                <p>総カロリー: {{ recipe.kcal }}kcal</p>
+                <p style=white-space:pre-wrap>
+                  {{ recipe.recipeContent }}
+                </p>
+                <div class="ui divider"></div>
+              </div>
+            
+            </div>
     </div>
     
     <!-- 見える部分だけ実装 -->
     <div class="ui main container">  
       <div class="ui segment">
-        <form class="ui large form">
+        <form class="ui large form" @submit.prevent="postDish">
           <h2>食事登録</h2>
           
           
          <div class="field">
            <div class="ui input">
-             <input type="date" placeholder="日にち">
+             <input v-model = "dish.date" type="date" placeholder="日にち">
            </div>
           </div>
   
           <div class="field">        
           <div class="ui input">
-             <input type="food" placeholder="ごはん">
+             <input v-model = "dish.dishkind" type="food" placeholder="ごはん">
            </div>
           </div>
           
           <div class="field">
            <div class="ui input">
-             <input type="cal" placeholder="カロリー">
+             <input v-model = "dish.kcal" type="cal" placeholder="カロリー">
            </div>
           </div>
           
@@ -108,29 +101,78 @@ export default {
   data() {
     // Vue.jsで使う変数はここに記述する
     return {
-      isCallingApi: false,
+
+      dish: {
+        userId: window.localStorage.getItem('userId'),
+        timestamp: null,
+        date: null,
+        dishkind: null,
+        kcal: null
+      },
+      dishes:[],
+      recipe: [],
+      userName:null,
     };
   },
 
   computed: {
     // 計算した結果を変数として利用したいときはここに記述する
+    
+  },
+  
+  created: async function () {
+    // Vue.jsの読み込みが完了したときに実行する処理はここに記述する
+    this.userName=window.localStorage.getItem('userName');
+    // apiからarticleを取得する
+    await this.getRecipe();
   },
 
   methods: {
     // Vue.jsで使う関数はここで記述する
-    async getRecipes() {
-      //this.isCallingApi = true;
+    async postDish() {
+
+      const requestBody = {
+        userId: this.dish.userId,
+        date: this.dish.date,
+        dishkind: this.dish.dishkind,
+        kcal: this.dish.kcal,
+        timestamp: this.dish.timestamp,
+      };
+      try {
+        /* global fetch */
+        const res = await fetch(baseUrl + "/dish", {
+          method: "POST",
+          body: JSON.stringify(requestBody),
+          headers,
+        });
+        const text = await res.text();
+        const jsonData = text ? JSON.parse(text) : {};
+        
+        if (!res.ok) {
+          const errorMessage =
+            jsonData.message ?? "エラーメッセージがありません";
+          throw new Error(errorMessage);
+        }
+        this.dishes=jsonData;
+        this.dish.date = "";
+        this.dish.dishkind = "";
+        this.dish.kcal = "";
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    
+     async getRecipe() {
 
       try {
         /* global fetch */
         const res = await fetch(baseUrl + "/recipe", {
           method: "GET",
-          headers,
         });
-        console.log(res)
 
         const text = await res.text();
         const jsonData = text ? JSON.parse(text) : {};
+        console.log(jsonData);
         // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
         if (!res.ok) {
           const errorMessage =
@@ -143,11 +185,9 @@ export default {
         console.log(this.recipe);
       } catch (e) {
         
-      } finally {
-        this.isCallingApi = false;
       }
     },
-  },
+  }
 }
 </script>
 

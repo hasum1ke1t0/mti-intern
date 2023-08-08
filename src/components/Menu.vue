@@ -1,5 +1,5 @@
 <template>
-    <div class = "ui secondry pointing orange inverted massive menu">
+    <div class = "ui secondry pointing orange inverted massive menu stackable">
         <!-- 基本的なコンテンツはここに記載する -->
         <img class="logoimg" src="src/components/sukusucook.png">
         <span class="comment">プロが作る子供のためのレシピサービス</span>
@@ -17,14 +17,6 @@
 <script>
     export default{
         name:'Menu',
-        
-          data() {
-            // Vue.jsで使う変数はここに記述する
-            return {
-              orLogin: true,
-              }
-            
-          },
         
         computed:{
             loginText(){

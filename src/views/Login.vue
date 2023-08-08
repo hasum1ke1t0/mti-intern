@@ -43,6 +43,9 @@
       <button @click="toggleMode()" class="ui hoge grey fluid button" type="submit" v-if="!isLogined">
         {{toggleText}}
       </button>
+        <div class="ui segment" v-if="isLogined">
+          <p>ログイン中：{{userName}}さん</p>
+        </div>
       <button @click="logout()" class="ui hoge grey fluid button" type="submit" v-if="isLogined">
         ログアウト
       </button>
@@ -88,6 +91,9 @@ export default {
     toggleText(){
       return this.isLogin ? '新規登録' : 'ログイン';
     },
+    userName(){
+      return this.user.userName
+    }
   },
 
   methods: {
@@ -105,6 +111,8 @@ export default {
       console.log("トークン",window.localStorage.getItem('token'));
       window.localStorage.clear()
       console.log("userId",window.localStorage.getItem('userId'));
+      /*global location*/
+       location.reload();
       console.log("ログアウト完了")
     },
     // 非同期操作が入るのでasyncを付与する
@@ -135,20 +143,23 @@ export default {
           }
           
           window.localStorage.setItem('token',jsonData.token);
+          window.localStorage.setItem('userName',jsonData.userName);
+          window.localStorage.setItem('birthday',jsonData.birthday);
           
-          console.log(window.localStorage.getItem('token'));
           window.localStorage.setItem('userId',this.user.userId)
-          console.log(window.localStorage)
+          console.log("ローカルストレージ",window.localStorage)
           this.isLogined=true
           
           // 成功時の処理
-          console.log(jsonData);
           console.log("ログイン完了")
           //ページ遷移
           console.log("ページ遷移開始")
-          this.$router.push('/MyPage')
+
+          await this.$router.push('/MyPage')
+          this.$router.go({path:'/MyPage',force:true})
           //ページ遷移終了
           console.log("ページ遷移終了")
+
         } catch (e) {
           // エラー時の処理
           console.log("エラー")
@@ -205,6 +216,7 @@ export default {
       else{
         console.log("トークンがあるのでログイン状態です")
         this.isLogined =true
+        this.user.userName=window.localStorage.getItem('userName');
       }
     }
 }
