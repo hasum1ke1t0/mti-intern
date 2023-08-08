@@ -105,6 +105,8 @@ export default {
       console.log("トークン",window.localStorage.getItem('token'));
       window.localStorage.clear()
       console.log("userId",window.localStorage.getItem('userId'));
+      /*global location*/
+       location.reload();
       console.log("ログアウト完了")
     },
     // 非同期操作が入るのでasyncを付与する
@@ -146,9 +148,12 @@ export default {
           console.log("ログイン完了")
           //ページ遷移
           console.log("ページ遷移開始")
-          this.$router.push('/MyPage')
+
+          await this.$router.push('/MyPage')
+          this.$router.go({path:'/MyPage',force:true})
           //ページ遷移終了
           console.log("ページ遷移終了")
+
         } catch (e) {
           // エラー時の処理
           console.log("エラー")
