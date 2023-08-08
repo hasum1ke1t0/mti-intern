@@ -32,19 +32,19 @@
           
          <div class="field">
            <div class="ui input">
-             <input type="date" placeholder="日にち">
+             <input v-model = "dish.date" type="date" placeholder="日にち">
            </div>
           </div>
   
           <div class="field">        
           <div class="ui input">
-             <input type="food" placeholder="ごはん">
+             <input v-model = "dish.dishkind" type="food" placeholder="ごはん">
            </div>
           </div>
           
           <div class="field">
            <div class="ui input">
-             <input type="cal" placeholder="カロリー">
+             <input v-model = "dish.kcal" type="cal" placeholder="カロリー">
            </div>
           </div>
           
@@ -57,7 +57,7 @@
     
     <div class="ui main container">  
       <div class="ui segment">
-        <form class="ui large form">
+        <form class="ui large form" @submit.prevent="postDish">
           <h2>記録確認</h2>
         </form>
         
@@ -88,7 +88,8 @@
 // 必要なものはここでインポートする
 // @は/srcの同じ意味です
 // import something from '@/components/something.vue';
-import { baseUrl } from '@/assets/config.js';
+import { baseUrl } from "@/assets/config.js";
+const headers = { Authorization: "mtiToken" };
 
 export default {
   name: 'MyPage',
@@ -100,6 +101,13 @@ export default {
   data() {
     // Vue.jsで使う変数はここに記述する
     return {
+      dish: {
+        userId: window.localStorage.getItem('userId'),
+        date: null,
+        dishkind: null,
+        kcal: null
+      },
+      dishes:[]
       recipe: [],
       userName:null,
     };
@@ -119,6 +127,39 @@ export default {
 
   methods: {
     // Vue.jsで使う関数はここで記述する
+    async postDish() {
+
+      const requestBody = {
+        userId: this.userId,
+        date: this.date,
+        dishkind: this.dishkind,
+        kcal: this.kcal
+      };
+      try {
+        /* global fetch */
+        const res = await fetch(baseUrl + "/dish", {
+          method: "POST",
+          body: JSON.stringify(requestBody),
+          headers,
+        });
+        console.log(res)
+        const text = await res.text();
+        const jsonData = text ? JSON.parse(text) : {};
+        console.log(jsonData)
+        
+        if (!res.ok) {
+          const errorMessage =
+            jsonData.message ?? "エラーメッセージがありません";
+          throw new Error(errorMessage);
+        }
+        this.dishes=jsonData;
+        this.dish.date = "";
+        this.dish.dishkind = "";
+        this.dish.kcal = "";
+      } catch (e) {
+        console.log(e)
+      }
+    },
     
      async getRecipe() {
 
