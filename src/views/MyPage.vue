@@ -32,19 +32,19 @@
           
          <div class="field">
            <div class="ui input">
-             <input v-model = "dish.date" type="date" placeholder="日にち">
+             <input v-model = "dish2.date" type="date" placeholder="日にち">
            </div>
           </div>
   
           <div class="field">        
           <div class="ui input">
-             <input v-model = "dish.dishkind" type="food" placeholder="ごはん">
+             <input v-model = "dish2.dishkind" type="food" placeholder="ごはん">
            </div>
           </div>
           
           <div class="field">
            <div class="ui input">
-             <input v-model = "dish.kcal" type="cal" placeholder="カロリー">
+             <input v-model = "dish2.kcal" type="cal" placeholder="カロリー">
            </div>
           </div>
           
@@ -58,7 +58,7 @@
     <div class="ui main container">  
       <div class="ui segment">
         <form class="ui large form">
-          <h2>記録確認</h2>
+          <h2>記録確認(カロリー)</h2>
         </form>
         
         <div class="field">
@@ -68,9 +68,9 @@
           </div>
           
         <div class="field">
-          <p>朝ご飯</p>
-          <p>昼ご飯</p>
-          <p>夜ご飯</p>
+          <p>朝ご飯: {{}}kcal</p>
+          <p>昼ご飯: {{}}kcal</p>
+          <p>夜ご飯: {{}}kcal</p>
         </div>
           
       </div>
@@ -101,8 +101,7 @@ export default {
   data() {
     // Vue.jsで使う変数はここに記述する
     return {
-
-      dish: {
+      dish2: {
         userId: window.localStorage.getItem('userId'),
         timestamp: null,
         date: null,
@@ -132,11 +131,11 @@ export default {
     async postDish() {
 
       const requestBody = {
-        userId: this.dish.userId,
-        date: this.dish.date,
-        dishkind: this.dish.dishkind,
-        kcal: this.dish.kcal,
-        timestamp: this.dish.timestamp,
+        userId: this.dish2.userId,
+        date: this.dish2.date,
+        dishkind: this.dish2.dishkind,
+        kcal: this.dish2.kcal,
+        timestamp: this.dish2.timestamp,
       };
       try {
         /* global fetch */
@@ -154,9 +153,9 @@ export default {
           throw new Error(errorMessage);
         }
         this.dishes=jsonData;
-        this.dish.date = "";
-        this.dish.dishkind = "";
-        this.dish.kcal = "";
+        this.dish2.date = "";
+        this.dish2.dishkind = "";
+        this.dish2.kcal = "";
       } catch (e) {
         console.log(e)
       }
