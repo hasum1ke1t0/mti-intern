@@ -22,6 +22,7 @@
             </div>
     </div>
     
+    <!-- 見える部分だけ実装 -->
     <div class="ui main container">  
       <div class="ui segment">
         <form class="ui large form">
