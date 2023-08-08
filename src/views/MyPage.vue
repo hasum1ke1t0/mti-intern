@@ -1,24 +1,25 @@
 <template>
   <div class="ui main container"> 
     <div class="ui segment">
-      <p>ようこそ、{{ }}さん</p>
+      <p>ようこそ、{{userName}}さん</p>
     </div>
   </div>
+
   
     <div class="ui main container">  
             <div class="ui segment">
               <h1>今日のおすすめメニュー</h1>
-              <h2>メニュー名</h2>
-              <h4>材料</h4>
-              <ul>
-                <li>ピーマン</li>
-                <li>油揚げ</li>
-              </ul>
-              <h4>手順</h4>
-              <ol>
-                <li>ピーマン、油揚げを切る</li>
-                <li>焼く</li>
-              </ol>
+              
+              <div class="content">
+                <h4>{{ recipe.recipeTitle }}</h4>
+                <p>年齢: {{ recipe.age }}歳向け</p>
+                <p>総カロリー: {{ recipe.kcal }}kcal</p>
+                <p>
+                  {{ recipe.recipeContent }}
+                </p>
+                <div class="ui divider"></div>
+              </div>
+            
             </div>
     </div>
     
@@ -87,6 +88,7 @@
 // 必要なものはここでインポートする
 // @は/srcの同じ意味です
 // import something from '@/components/something.vue';
+import { baseUrl } from '@/assets/config.js';
 
 export default {
   name: 'MyPage',
@@ -98,16 +100,52 @@ export default {
   data() {
     // Vue.jsで使う変数はここに記述する
     return {
+      recipe: [],
+      userName:null,
     };
   },
 
   computed: {
     // 計算した結果を変数として利用したいときはここに記述する
+    
+  },
+  
+  created: async function () {
+    // Vue.jsの読み込みが完了したときに実行する処理はここに記述する
+    this.userName=window.localStorage.getItem('userName');
+    // apiからarticleを取得する
+    await this.getRecipe();
   },
 
   methods: {
     // Vue.jsで使う関数はここで記述する
-  },
+    
+     async getRecipe() {
+
+      try {
+        /* global fetch */
+        const res = await fetch(baseUrl + "/recipe", {
+          method: "GET",
+        });
+
+        const text = await res.text();
+        const jsonData = text ? JSON.parse(text) : {};
+        console.log(jsonData);
+        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+        if (!res.ok) {
+          const errorMessage =
+            jsonData.message ?? "エラーメッセージがありません";
+          throw new Error(errorMessage);
+        }
+
+        // 記事がなかった場合undefinedとなり、記事追加時のunshiftでエラーとなるため、空のarrayを代入
+        this.recipe = jsonData.articles ?? [];
+        console.log(this.recipe);
+      } catch (e) {
+        
+      }
+    },
+  }
 }
 </script>
 
