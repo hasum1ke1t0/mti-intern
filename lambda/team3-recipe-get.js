@@ -30,62 +30,83 @@ exports.handler = async (event, context) => {
 
   const param = {
     TableName,
-    Limit: 100,
+    //Limit: 100,
   }
   
   const scanCommand = new ScanCommand(param);
   try {
 
     const articles = (await client.send(scanCommand)).Items;
-    console.log(1)
+    //console.log(1)
   
     if (articles.length == 0) {
       response.body = JSON.stringify({ articles: [] });
-      console.log(2)
+      //console.log(2)
     } else {
       const unmarshalledArticles = articles.map((item) => unmarshall(item));
-      console.log(3)
+      //console.log(3)
       //unmarshalledArticles.sort((a, b) => b.timestamp - a.timestamp);
       const qs = event.queryStringParameters;
       
-      console.log(4)
-      console.log(qs)
-      console.log(qs?.kcal)
+      //console.log(4)
+      //console.log(qs)
+      //console.log(qs?.kcal)
+      //console.log(qs?.material)
       
+      const hasMat = qs?.material;
       const hasKcal = qs?.kcal;
       const hasAge = qs?.age;
+      let newUnmsMat = [];
       let newUnmsKcal = [];
       let newUnmsAge = [];
       
-      console.log(5)
+      //console.log(5)
       
-      // kcalでしぼりこみ
-      if (!hasKcal) {
+      // materialでしぼりこみ
+      if (!hasMat) {
         //response.body = JSON.stringify({ articles: unmarshalledArticles });
-        newUnmsKcal = unmarshalledArticles;
-        console.log(6)
+        newUnmsMat = unmarshalledArticles;
+        //console.log(6)
       } else{
-        console.log(7)
+        //console.log(7)
         for (let i = 0; i < unmarshalledArticles.length; i++) {
-          console.log(i)
-          if (unmarshalledArticles[i].kcal == hasKcal){
-            newUnmsKcal.push(unmarshalledArticles[i]);
+          //console.log(i)
+          if (unmarshalledArticles[i].material == hasMat){
+            newUnmsMat.push(unmarshalledArticles[i]);
           }
         }
       }
+      //console.log(newUnmsMat)
+      // kcalでしぼりこみ
+      if (!hasKcal) {
+        newUnmsKcal = newUnmsMat;
+        //console.log(8)
+      } else{
+        //console.log(9)
+        for (let i = 0; i < newUnmsMat.length; i++) {
+          //console.log(i)
+          if (newUnmsMat[i].kcal == hasKcal){
+            newUnmsKcal.push(newUnmsMat[i]);
+          }
+        }
+      }
+      //console.log(newUnmsKcal)
       // Ageでしぼりこみ
       if (!hasAge) {
         newUnmsAge = newUnmsKcal;
-        //response.body = JSON.stringify({ articles: newUnmsAge });
+        //console.log(10)
       } else {
+        //console.log(11)
         for (let i = 0; i < newUnmsKcal.length; i++) {
-          console.log(i)
+          //console.log(i)
           if (newUnmsKcal[i].age == hasAge){
             newUnmsAge.push(newUnmsKcal[i]);
           }
         }
         //response.body = JSON.stringify({ articles: newUnmsAge });
       }
+      //console.log(12)
+      //console.log(newUnmsAge)
       // ランダムで選ぶ
       const randMax = newUnmsAge.length;
       var rand = Math.floor( Math.random() * randMax );
