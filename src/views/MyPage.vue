@@ -63,14 +63,14 @@
         
         <div class="field">
            <div class="ui input">
-             <input type="date" placeholder="">
+             <input @change="changeDate()" v-model="dishRecode.date" type="date" placeholder="">
            </div>
           </div>
           
         <div class="field">
-          <p>朝ご飯</p>
-          <p>昼ご飯</p>
-          <p>夜ご飯</p>
+          <p>朝ご飯：{{dishRecode.breakfast}} kcal</p>
+          <p>昼ご飯：{{dishRecode.lunch}} kcal</p>
+          <p>夜ご飯：{{dishRecode.dinner}} kcal</p>
         </div>
           
       </div>
@@ -112,6 +112,12 @@ export default {
       dishes:[],
       recipe: [],
       userName:null,
+      dishRecode:{
+        date:null,
+        breakfast:null,
+        lunch:null,
+        dinner:null,
+      }
     };
   },
 
@@ -136,7 +142,7 @@ export default {
         date: this.dish.date,
         dishkind: this.dish.dishkind,
         kcal: this.dish.kcal,
-        timestamp: this.dish.timestamp,
+        // timestamp: this.dish.timestamp,
       };
       try {
         /* global fetch */
@@ -187,6 +193,68 @@ export default {
         
       }
     },
+    async changeDate(){
+      try{
+        /* global fetch */
+        const res = await fetch(baseUrl + "/dish?userid="+window.localStorage.getItem('userId')+"&date="+this.dishRecode.date+"&dishkind="+"朝", {
+          method: "GET",
+        });
+        
+        const text = await res.text()
+        const jsonData = text ? JSON.parse(text) : {};
+        
+        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+        if (!res.ok) {
+          const errorMessage = jsonData.message ?? 'エラーメッセージがありません';
+          throw new Error(errorMessage);
+        }
+        console.log("kcal",jsonData.kcal)
+        this.dishRecode.breakfast=jsonData.kcal
+      
+      }catch(e){
+        console.log(e)
+      }
+      try{
+        /* global fetch */
+        const res = await fetch(baseUrl + "/dish?userid="+window.localStorage.getItem('userId')+"&date="+this.dishRecode.date+"&dishkind="+"昼", {
+          method: "GET",
+        });
+        
+        const text = await res.text()
+        const jsonData = text ? JSON.parse(text) : {};
+        
+        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+        if (!res.ok) {
+          const errorMessage = jsonData.message ?? 'エラーメッセージがありません';
+          throw new Error(errorMessage);
+        }
+        console.log("kcal",jsonData.kcal)
+        this.dishRecode.lunch=jsonData.kcal
+      
+      }catch(e){
+        console.log(e)
+      }
+      try{
+        /* global fetch */
+        const res = await fetch(baseUrl + "/dish?userid="+window.localStorage.getItem('userId')+"&date="+this.dishRecode.date+"&dishkind="+"夜", {
+          method: "GET",
+        });
+        
+        const text = await res.text()
+        const jsonData = text ? JSON.parse(text) : {};
+        
+        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+        if (!res.ok) {
+          const errorMessage = jsonData.message ?? 'エラーメッセージがありません';
+          throw new Error(errorMessage);
+        }
+        console.log("kcal",jsonData.kcal)
+        this.dishRecode.dinner=jsonData.kcal
+      
+      }catch(e){
+        console.log(e)
+      }
+    }
   }
 }
 </script>
