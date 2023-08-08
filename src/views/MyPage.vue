@@ -6,20 +6,28 @@
   </div>
   
     <div class="ui main container">  
-            <div class="ui segment">
-              <h1>今日のおすすめメニュー</h1>
-              <h2>メニュー名</h2>
-              <h4>材料</h4>
-              <ul>
-                <li>ピーマン</li>
-                <li>油揚げ</li>
-              </ul>
-              <h4>手順</h4>
-              <ol>
-                <li>ピーマン、油揚げを切る</li>
-                <li>焼く</li>
-              </ol>
-            </div>
+      <div class="ui segment">
+        <h1>今日のおすすめメニュー</h1>
+        
+        <h2>メニュー名</h2>
+        <h4>材料</h4>
+        <ul>
+          <li>ピーマン</li>
+          <li>油揚げ</li>
+        </ul>
+        <h4>手順</h4>
+        <ol>
+          <li>ピーマン、油揚げを切る</li>
+          <li>焼く</li>
+        </ol>
+        <!---->
+        <!--
+        <li class="comment">
+          <div class="content">
+            <span class="recipe_title">{{ recipe.recipeTitle }}</span>
+          </div>
+        </li><!---->
+      </div>
     </div>
     
     <!-- 見える部分だけ実装 -->
@@ -87,6 +95,8 @@
 // 必要なものはここでインポートする
 // @は/srcの同じ意味です
 // import something from '@/components/something.vue';
+import { baseUrl } from "@/assets/config.js";
+const headers = { Authorization: "mtiToken" };
 
 export default {
   name: 'MyPage',
@@ -98,6 +108,7 @@ export default {
   data() {
     // Vue.jsで使う変数はここに記述する
     return {
+      isCallingApi: false,
     };
   },
 
@@ -107,6 +118,35 @@ export default {
 
   methods: {
     // Vue.jsで使う関数はここで記述する
+    async getRecipes() {
+      //this.isCallingApi = true;
+
+      try {
+        /* global fetch */
+        const res = await fetch(baseUrl + "/recipe", {
+          method: "GET",
+          headers,
+        });
+        console.log(res)
+
+        const text = await res.text();
+        const jsonData = text ? JSON.parse(text) : {};
+        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+        if (!res.ok) {
+          const errorMessage =
+            jsonData.message ?? "エラーメッセージがありません";
+          throw new Error(errorMessage);
+        }
+
+        // 記事がなかった場合undefinedとなり、記事追加時のunshiftでエラーとなるため、空のarrayを代入
+        this.recipe = jsonData.articles ?? [];
+        console.log(this.recipe);
+      } catch (e) {
+        
+      } finally {
+        this.isCallingApi = false;
+      }
+    },
   },
 }
 </script>
