@@ -140,7 +140,13 @@ exports.handler = async (event, context) => {
       //console.log(nUDK[0])
       //console.log('nUDK.kcal:'+nUDK[0].kcal)
       //response.body = JSON.stringify({ dish: nUDK });
-      response.body = JSON.stringify({ kcal: nUDK[0].kcal });
+      console.log("読み込み前")
+      console.log(nUDK[0])
+      if (nUDK[0] != undefined){
+        response.body = JSON.stringify({ kcal: nUDK[0].kcal });
+      }else{
+        response.body = JSON.stringify({ kcal: 0})
+      }
       //console.log(response.body)
     }//*/
     /* 動作確認済み終わり */
