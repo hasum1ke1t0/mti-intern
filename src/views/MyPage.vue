@@ -1,7 +1,7 @@
 <template>
   <div class="ui main container"> 
     <div class="ui segment">
-      <p>ようこそ、{{  }}さん</p>
+      <p>ようこそ、{{ }}さん</p>
     </div>
   </div>
   
