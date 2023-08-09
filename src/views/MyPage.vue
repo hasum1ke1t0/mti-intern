@@ -1,7 +1,7 @@
 <template>
   <div class="ui main container"> 
     <div class="ui segment">
-      <p>ようこそ、{{userName}}さん</p>
+      <p>ようこそ、{{ userName }}さん</p>
     </div>
   </div>
 
@@ -57,22 +57,26 @@
     
     <div class="ui main container">  
       <div class="ui segment">
-        <form class="ui large form">
+        <form class="ui large form" @submit.prevent="getdishkind">
           <h2>記録確認(カロリー)</h2>
-        </form>
         
         <div class="field">
            <div class="ui input">
-             <input type="date" placeholder="">
+             <input v-model="dish.date" type="date" placeholder="">
            </div>
           </div>
           
         <div class="field">
-          <p>朝ご飯: {{}}kcal</p>
-          <p>昼ご飯: {{}}kcal</p>
-          <p>夜ご飯: {{}}kcal</p>
+          <p>朝ご飯: {{ dish.dishkind[0] }}kcal</p>
+          <p>昼ご飯: {{ dish.dishkind[1] }}kcal</p>
+          <p>夜ご飯: {{ dish.dishkind[2] }}kcal</p>
         </div>
-          
+        
+        <button class="ui huge green fluid button" type="submit">
+            確認
+        </button>
+       
+        </form>
       </div>
     </div>
     
@@ -111,6 +115,11 @@ export default {
       dishes:[],
       recipe: [],
       userName:null,
+      dish:{
+        userId: window.localStorage.getItem('userId'),
+        date: null,
+        dishkind: [null,null,null]
+      }
     };
   },
 
@@ -186,6 +195,73 @@ export default {
         
       }
     },
+    async getdishkind() {
+      const {userId, date, dishkind} = this.dish;
+      
+      const qs = `?date=${date}&userId=${userId}&dishkind=朝`;
+      console.log(qs)
+      const qs2 = `?date=${date}&userId=${userId}&dishkind=昼`;
+      console.log(qs2)
+      const qs3 = `?date=${date}&userId=${userId}&dishkind=夜`;
+      console.log(qs3)
+      try {
+        /* global fetch */
+        const res = await fetch(baseUrl + `/dish${qs}`, {
+          method: "GET",
+          headers,
+        });
+
+        const text = await res.text();
+        const jsonData = text ? JSON.parse(text) : {};
+        console.log(res)
+
+        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+        if (!res.ok) {
+          const errorMessage =
+            jsonData.message ?? "エラーメッセージがありません";
+          throw new Error(errorMessage);
+        }
+        
+        const res2 = await fetch(baseUrl + `/dish?${qs2}`, {
+          method: "GET",
+          headers,
+        });
+
+        const text2 = await res2.text();
+        const jsonData2 = text2 ? JSON.parse(text2) : {};
+        console.log(res2)
+
+        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+        if (!res2.ok) {
+          const errorMessage2 =
+            jsonData2.message2 ?? "エラーメッセージがありません";
+          throw new Error(errorMessage2);
+        }
+        
+        const res3 = await fetch(baseUrl + `/dish?${qs3}`, {
+          method: "GET",
+          headers,
+        });
+
+        const text3 = await res3.text();
+        const jsonData3 = text3 ? JSON.parse(text3) : {};
+        console.log(res3)
+
+        // fetchではネットワークエラー以外のエラーはthrowされないため、明示的にthrowする
+        if (!res3.ok) {
+          const errorMessage3 =
+            jsonData3.message3 ?? "エラーメッセージがありません";
+          throw new Error(errorMessage3);
+        }
+        
+        dishkind[0] = jsonData.kcal;
+        dishkind[1] = jsonData2.kcal;
+        dishkind[2] = jsonData3.kcal;
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
   }
 }
 </script>
