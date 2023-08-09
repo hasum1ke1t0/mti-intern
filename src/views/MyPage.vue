@@ -1,7 +1,7 @@
 <template>
   <div class="ui main container"> 
     <div class="ui segment">
-      <p>ようこそ、{{ userName }}さん</p>
+      <p>ようこそ、{{userName}}さん</p>
     </div>
   </div>
 
@@ -32,19 +32,19 @@
           
          <div class="field">
            <div class="ui input">
-             <input v-model = "dish2.date" type="date" placeholder="日にち">
+             <input v-model = "dish.date" type="date" placeholder="日にち">
            </div>
           </div>
   
           <div class="field">        
           <div class="ui input">
-             <input v-model = "dish2.dishkind" type="food" placeholder="ごはん">
+             <input v-model = "dish.dishkind" type="food" placeholder="ごはん">
            </div>
           </div>
           
           <div class="field">
            <div class="ui input">
-             <input v-model = "dish2.kcal" type="cal" placeholder="カロリー">
+             <input v-model = "dish.kcal" type="cal" placeholder="カロリー">
            </div>
           </div>
           
@@ -57,13 +57,13 @@
     
     <div class="ui main container">  
       <div class="ui segment">
-        <form class="ui large form" @submit.prevent="getdishkind">
-          <h2>記録確認(カロリー)</h2>
+        <form class="ui large form">
+          <h2>記録確認</h2>
+        </form>
         
         <div class="field">
            <div class="ui input">
              <input @change="changeDate()" v-model="dishRecode.date" type="date" placeholder="">
-
            </div>
           </div>
           
@@ -72,12 +72,7 @@
           <p>昼ご飯：{{dishRecode.lunch}} kcal</p>
           <p>夜ご飯：{{dishRecode.dinner}} kcal</p>
         </div>
-        
-        <button class="ui huge green fluid button" type="submit">
-            確認
-        </button>
-       
-        </form>
+          
       </div>
     </div>
     
@@ -106,7 +101,8 @@ export default {
   data() {
     // Vue.jsで使う変数はここに記述する
     return {
-      dish2: {
+
+      dish: {
         userId: window.localStorage.getItem('userId'),
         timestamp: null,
         date: null,
@@ -164,9 +160,9 @@ export default {
           throw new Error(errorMessage);
         }
         this.dishes=jsonData;
-        this.dish2.date = "";
-        this.dish2.dishkind = "";
-        this.dish2.kcal = "";
+        this.dish.date = "";
+        this.dish.dishkind = "";
+        this.dish.kcal = "";
       } catch (e) {
         console.log(e)
       }
@@ -272,3 +268,6 @@ export default {
 }
 
 </style>
+
+
+
