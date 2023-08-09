@@ -57,8 +57,9 @@
     
     <div class="ui main container">  
       <div class="ui segment">
-        <form class="ui large form" @submit.prevent="getdishkind">
+        <form class="ui large form">
           <h2>記録確認(カロリー)</h2>
+        </form>
         
         <div class="field">
            <div class="ui input">
@@ -73,11 +74,6 @@
           <p>夜ご飯：{{dishRecode.dinner}} kcal</p>
         </div>
         
-        <button class="ui huge green fluid button" type="submit">
-            確認
-        </button>
-       
-        </form>
       </div>
     </div>
     
